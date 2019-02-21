@@ -1,3 +1,5 @@
+73a3a41 Include errno.h and fix sighandler
+47efe3a Updated ChangeLog
 5416c92 v0.1.2 -- added signal handling
 41b333d Push v0.1.1
 de24b42 Updated version number
