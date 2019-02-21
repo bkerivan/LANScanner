@@ -1,3 +1,9 @@
+5416c92 v0.1.2 -- added signal handling
+41b333d Push v0.1.1
+de24b42 Updated version number
+2ea4fbb Updated NEWS
+dd889cb Updated error messages
+a0c6225 Updated ChangeLog
 799fee4 Include stddef.h in probe.c for NULL declaration
 8eb0db1 Separated source code into modules
 fcd99d7 Updated README.md
