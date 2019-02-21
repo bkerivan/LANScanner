@@ -1,3 +1,8 @@
+799fee4 Include stddef.h in probe.c for NULL declaration
+8eb0db1 Separated source code into modules
+fcd99d7 Updated README.md
+2c7e757 Added LICENSE
+414095a Updated ChangeLog
 8526d9e Fixed README formatting
 de146c9 Added installation instructions
 7d345a0 Updated ChangeLog
