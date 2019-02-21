@@ -1,4 +1,5 @@
 #include <arpa/inet.h>
+#include <errno.h>
 #include <ifaddrs.h>
 #include <net/if.h>
 #include <netinet/in.h>
@@ -24,7 +25,7 @@ int flag;
 /*
  * Set global flag if a marked signal has been caught
  */
-int
+void
 sighandler(int signum)
 {
     /*
