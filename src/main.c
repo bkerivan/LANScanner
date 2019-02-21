@@ -2,6 +2,7 @@
 #include <ifaddrs.h>
 #include <net/if.h>
 #include <netinet/in.h>
+#include <signal.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
@@ -17,6 +18,43 @@
 #define DEFAULT_PORT            80
 #define DEFAULT_TIMEOUT_SEC     0
 #define DEFAULT_TIMEOUT_USEC    10000
+
+int flag;
+
+/*
+ * Set global flag if a marked signal has been caught
+ */
+int
+sighandler(int signum)
+{
+    /*
+     * Write newline to stdout if keyboard interrupt has been sent
+     */
+     if (signum == SIGINT)
+     {
+         putchar('\n');
+     }
+
+     flag++;
+}
+
+/*
+ * Catch all catchable signals that terminate process (plus SIGQUIT)
+ */
+void
+catch_signals(void)
+{
+    struct sigaction act = {{0}};
+
+    sigemptyset(&act.sa_mask);
+    act.sa_handler = sighandler;
+
+    sigaction(SIGHUP, &act, NULL);
+    sigaction(SIGINT, &act, NULL);
+    sigaction(SIGQUIT, &act, NULL);
+    sigaction(SIGPIPE, &act, NULL);
+    sigaction(SIGTERM, &act, NULL);
+}
 
 int
 main(void)
@@ -84,11 +122,17 @@ main(void)
 
     addr.sa_family = AF_INET;
 
+    flag = 0;
+    catch_signals();
+
     /*
      * To increment target address, need to convert IP number from network byte
      * order to host byte order, add one, and convert back
+     *
+     * Also stop if flag != 0, meaning signal has been caught
      */
-    for (target = start; target <= end; target = htonl(ntohl(target) + 1))
+    for (target = start; target <= end && !flag;
+         target = htonl(ntohl(target) + 1))
     {
         /*
          * Don't scan local address or broadcast address
@@ -117,7 +161,11 @@ main(void)
 
         if (ret <= 0)
         {
-            if (ret == -1)
+            /*
+             * If errno is EINTR, signal has been caught, which should not be
+             * considered an error condition for the purposes of this program
+             */
+            if (ret == -1 && errno != EINTR)
             {
                 perror("[!] Probe of remote host failed");
             }
