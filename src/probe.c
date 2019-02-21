@@ -1,4 +1,5 @@
 #include <errno.h>
+#include <stddef.h>
 #include <sys/select.h>
 
 #include "probe.h"
