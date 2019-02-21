@@ -1,6 +1,6 @@
 # LANScanner
 
-Scans your LAN.
+Scans your subnet range for active hosts and displays their IPv4 addresses.
 
 ## Installing
 
