@@ -30,7 +30,7 @@ main(void)
 
     if (getifaddrs(&ifa))
     {
-        perror("getifaddrs");
+        perror("[!] Failed to retrieve network interface list");
         return 1;
     }
 
@@ -56,7 +56,7 @@ main(void)
      */
     if (!ifap)
     {
-        fprintf(stderr, "Failed to find suitable interface\n");
+        fprintf(stderr, "[!] Failed to find suitable network interface\n");
         freeifaddrs(ifa);
         return 1;
     }
@@ -97,7 +97,9 @@ main(void)
         {
             if (!INET_STR(&addr, addrbuf, INET_ADDRSTRLEN))
             {
-                perror("INET_STR");
+                perror("[!] Failed to convert address to string");
+                printf("0x%08x [%s]\n", target,
+                       target == local ? "YOU" : "BROADCAST");
             }
             else
             {
@@ -117,7 +119,7 @@ main(void)
         {
             if (ret == -1)
             {
-                perror("tcp_probe");
+                perror("[!] Probe of remote host failed");
             }
 
             continue;
@@ -125,7 +127,7 @@ main(void)
 
         if (!INET_STR(&addr, addrbuf, INET_ADDRSTRLEN))
         {
-            perror("INET_STR");
+            perror("[!] Failed to convert remote host address to string");
 
             /*
              * If we can't get the IPv4 string, just display the hexidecimal
