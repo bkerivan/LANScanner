@@ -1,6 +1,4 @@
 bin_PROGRAMS = LANScanner
 
-#AM_CFLAGS = $(PROJ_CFLAGS)
-
-LANScanner_SOURCES = main.c
+LANScanner_SOURCES = main.c socket_util.h socket_util.c probe.h probe.c
 
