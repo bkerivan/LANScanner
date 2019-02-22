@@ -27,13 +27,27 @@ set_scan_type(struct scanner *sc, uint8_t scan_type, uint16_t port)
     switch (scan_type)
     {
         case SCAN_TYPE_CONNECT:
-            sc->scan_type = scan_type;
             sc->probe = connect_probe;
-            sc->port = htons(port);
-            sc->target.sin_port = sc->port;
             break;
         default:
             ret = -1;
+    }
+
+    /*
+     * So we don't have to repeat this for each case in switch statement
+     */
+    if (ret != -1)
+    {
+        sc->scan_type = scan_type;
+    }
+
+    /*
+     * This will be extended to check for all scan types where port is relevant
+     */
+    if (scan_type == SCAN_TYPE_CONNECT)
+    {
+        sc->port = port ? port : (uint16_t)(nanorand() % 65535);
+        sc->target.sin_port = htons(sc->port);
     }
 
     return ret;

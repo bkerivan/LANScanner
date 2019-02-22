@@ -60,7 +60,6 @@ struct scanner
  * If timeout is NULL, the scanner's timeout is set to the default value of 10
  * milliseconds.
  *
- * TODO
  * If the port argument is 0, the port to be scanned is set to a random integer
  * between 0 and 65535. For scan types where ports are irrelevant, the port
  * argument is ignored.
@@ -87,7 +86,6 @@ free_scanner(struct scanner *sc);
  * If timeout is NULL, the scanner's timeout is set to the default value
  * defined above.
  *
- * TODO
  * If the port argument is 0, the port to be scanned is set to a random integer
  * between 0 and 65535. For scan types where ports are irrelevant, the port
  * argument is ignored.
