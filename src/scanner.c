@@ -1,12 +1,12 @@
 #include <arpa/inet.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <string.h>
 #include <sys/socket.h>
 
 #include "device.h"
 #include "probe.h"
 #include "scanner.h"
+#include "util.h"
 
 
 /*
@@ -56,14 +56,12 @@ init_scanner(uint8_t scan_type, const char *dev_name, struct timeval *timeout,
 {
     struct scanner *sc = NULL;
 
-    sc = malloc(sizeof(*sc));
+    sc = zmalloc(sizeof(*sc));
 
     if (!sc)
     {
         return NULL;
     }
-
-    memset(sc, 0, sizeof(*sc));
 
     sc->dev = get_live_device(dev_name);
 

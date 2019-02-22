@@ -6,6 +6,7 @@
 #include <sys/types.h>
 
 #include "device.h"
+#include "util.h"
 
 struct device *
 get_live_device(const char *dev_name)
@@ -63,7 +64,7 @@ get_live_device(const char *dev_name)
         return NULL;
     }
 
-    dev = malloc(sizeof(*dev));
+    dev = zmalloc(sizeof(*dev));
     
     if (!dev)
     {
@@ -71,7 +72,6 @@ get_live_device(const char *dev_name)
         return NULL;
     }
 
-    memset(dev, 0, sizeof(*dev));
     strncpy(dev->name, ifap->ifa_name, IFNAMSIZ);
     memcpy(&dev->local, ifap->ifa_addr, sizeof(dev->local));
     memcpy(&dev->netmask, ifap->ifa_netmask, sizeof(dev->netmask));
@@ -81,7 +81,7 @@ get_live_device(const char *dev_name)
      */
     if (ifap->ifa_dstaddr && ifap->ifa_flags & IFF_BROADCAST)
     {
-        dev->bcast = malloc(sizeof(*dev->bcast));
+        dev->bcast = zmalloc(sizeof(*dev->bcast));
 
         if (!dev->bcast)
         {
@@ -90,7 +90,6 @@ get_live_device(const char *dev_name)
             return NULL;
         }
 
-        memset(dev->bcast, 0, sizeof(*dev->bcast));
         memcpy(dev->bcast, ifap->ifa_dstaddr, sizeof(*dev->bcast));
     }
 
