@@ -64,7 +64,7 @@ connect_probe(struct scanner *sc)
      */
     if (ret <= 0)
     {
-        close_sock(fd);
+        close_sock(sc->fd);
 
         /*
          * Either ret is -1 and error occurred or ret is 0 and connection timed
@@ -75,7 +75,7 @@ connect_probe(struct scanner *sc)
 
     if (getsockopt(sc->fd, SOL_SOCKET, SO_ERROR, &ret, &len))
     {
-        close_sock(fd);
+        close_sock(sc->fd);
         return -1;
     }
 

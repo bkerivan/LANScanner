@@ -1,5 +1,6 @@
 #include <arpa/inet.h>
 #include <errno.h>
+#include <netinet/in.h>
 #include <signal.h>
 #include <stdio.h>
 
@@ -48,10 +49,16 @@ void
 print_up_host(struct scanner *sc)
 {
     char addrbuf[INET_ADDRSTRLEN] = {0};
+    in_addr_t bcast = 0;
 
     if (!sc)
     {
         return;
+    }
+
+    if (sc->dev->bcast)
+    {
+        bcast = sc->dev->bcast->sin_addr.s_addr;
     }
 
     if (!inet_ntop(AF_INET, &sc->target.sin_addr, addrbuf, INET_ADDRSTRLEN))
@@ -64,28 +71,22 @@ print_up_host(struct scanner *sc)
         printf("%s", addrbuf);
     }
     
-    if (sc->target.sin_addr.s_addr == sc->dev->local.sin_addr.s_addr)
+    if (sc->target.sin_addr.s_addr == sc->dev->local.sin_addr.s_addr
+        || sc->target.sin_addr.s_addr == bcast)
     {
-        printf(" [YOU]");
+        printf(" [%s]\n", sc->target.sin_addr.s_addr == bcast ? "BROADCAST"
+                                                              : "YOU");
     }
-    else if (sc->dev->bcast)
+    else
     {
-        if (sc->target.sin_addr.s_addr == sc->dev->bcast->sin_addr.s_addr)
-        {
-            printf(" [BROADCAST]");
-        }
+        putchar('\n');
     }
-
-    putchar('\n');
 }
 
 void
 print_probe_error(struct scanner *sc)
 {
-    if (errno != EINVAL)
-    {
-        perror("[!] Probe of remote host failed");
-    }
+    perror("[!] Probe of remote host failed");
 }
 
 int

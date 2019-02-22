@@ -109,7 +109,7 @@ run_scan(struct scanner *sc, probe_up_callback_t up_callback,
     }
 
     for (sc->target.sin_addr.s_addr = sc->start;
-         sc->target.sin_addr.s_addr != sc->end && !signal_flag;
+         sc->target.sin_addr.s_addr <= sc->end && !signal_flag;
          sc->target.sin_addr.s_addr = htonl(ntohl(sc->target.sin_addr.s_addr)
                                             + 1))
     {
