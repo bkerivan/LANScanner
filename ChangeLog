@@ -1,3 +1,7 @@
+b76e43b Push v0.2.1
+07599ca Added port randomization to scanner module, but LANScan still scans default port 80
+115df82 Added util module and switched to zmalloc
+c41df9a Updated ChangeLog
 e255aa1 Push v0.2.0
 d13caee Added *.swp to .gitignore
 b26fc3b Updated ChangeLog
