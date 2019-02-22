@@ -1,9 +1,7 @@
 #ifndef PROBE_H
 #define PROBE_H
 
-#include <netinet/in.h>
-#include <stdint.h>
-#include <sys/time.h>
+#include "scanner.h"
 
 /*
  * Probes remote host at specified address to determine if host is up.
@@ -13,7 +11,7 @@
  * Upon error, returns -1 and sets errno.
  */
 int
-tcp_probe(struct sockaddr_in *target, uint16_t port, struct timeval *timeout);
+connect_probe(struct scanner *sc);
 
 #endif /* PROBE_H */
 

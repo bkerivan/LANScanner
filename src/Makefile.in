@@ -101,7 +101,7 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_LANScanner_OBJECTS = main.$(OBJEXT) socket_util.$(OBJEXT) \
-	probe.$(OBJEXT) device.$(OBJEXT)
+	probe.$(OBJEXT) device.$(OBJEXT) scanner.$(OBJEXT)
 LANScanner_OBJECTS = $(am_LANScanner_OBJECTS)
 LANScanner_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_@AM_V@)
@@ -245,7 +245,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 LANScanner_SOURCES = main.c socket_util.h socket_util.c probe.h probe.c \
-device.h device.c
+device.h device.c scanner.h scanner.c
 
 all: all-am
 
@@ -336,6 +336,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/device.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/probe.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scanner.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/socket_util.Po@am__quote@
 
 .c.o:
