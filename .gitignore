@@ -9,6 +9,7 @@ configure.scan
 coverage_report
 libtool
 stamp-h1
+*.swp
 *~
 *.html
 *.log
