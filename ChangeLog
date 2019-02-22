@@ -1,3 +1,8 @@
+434c9bd Fixed checks for broadcast address and a couple errors in probe.c
+9294b43 Moved callbacks from probe to scan
+6959556 Added scanner module
+c44f2dd Push v0.1.3
+be1633c Updated ChangeLog
 0748f3e Push v0.1.3
 c2c88bd Moved some functionality from main program to device module
 5175946 Updated ChangeLog
