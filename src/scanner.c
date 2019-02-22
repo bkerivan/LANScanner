@@ -101,44 +101,44 @@ run_scan(struct scanner *sc, probe_up_callback_t up_callback,
          probe_down_callback_t down_callback,
          probe_error_callback_t error_callback)
 {
+    int ret = 0;
+
     if (!sc)
     {
         return;
     }
-
-    sc->up_callback = up_callback;
-    sc->down_callback = down_callback;
-    sc->error_callback = error_callback;
 
     for (sc->target.sin_addr.s_addr = sc->start;
          sc->target.sin_addr.s_addr != sc->end && !signal_flag;
          sc->target.sin_addr.s_addr = htonl(ntohl(sc->target.sin_addr.s_addr)
                                             + 1))
     {
-        if (sc->target.sin_addr.s_addr == sc->dev->local.sin_addr.s_addr)
-        {
-            if (sc->up_callback)
-            {
-                sc->up_callback(sc);
-            }
+        ret = sc->probe(sc);
 
-            continue;
-        }
-        
-        if (sc->dev->bcast)
+        switch (ret)
         {
-            if (sc->target.sin_addr.s_addr == sc->dev->bcast->sin_addr.s_addr)
-            {
-                if (sc->up_callback)
+            case 0:
+                if (down_callback)
                 {
-                    sc->up_callback(sc);
+                    down_callback(sc);
                 }
-
-                continue;
-            }
+                break;
+            case 1:
+                if (up_callback)
+                {
+                    up_callback(sc);
+                }
+                break;
+            default:    // ret is -1
+                /*
+                 * EINTR means a signal has been caught, which should not be
+                 * considered an error condition
+                 */
+                if (error_callback && errno != EINTR)
+                {
+                    error_callback(sc);
+                }
         }
-
-        sc->probe(sc);
     }
 }
 

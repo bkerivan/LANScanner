@@ -45,9 +45,6 @@ struct scanner
     struct device *dev;
     uint8_t scan_type;
     probe_method_t probe;
-    probe_up_callback_t up_callback;
-    probe_down_callback_t down_callback;
-    probe_error_callback_t error_callback;
     struct timeval timeout;
     struct sockaddr_in target;
     in_addr_t start;
@@ -94,11 +91,6 @@ free_scanner(struct scanner *sc);
  * If the port argument is 0, the port to be scanned is set to a random integer
  * between 0 and 65535. For scan types where ports are irrelevant, the port
  * argument is ignored.
- *
- * If any of the callbacks are not null: up_callback is called whenever a probe
- * detects an up host, down_callback is called whenever a probe detects a host
- * that is not up, and error_callback is called whenever an error occurs in a
- * probe.
  *
  * On success, returns a pointer to an initialized struct scanner; on error,
  * returns NULL and sets errno.
