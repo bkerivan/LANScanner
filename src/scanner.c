@@ -171,6 +171,16 @@ run_scan(struct scanner *sc, probe_up_callback_t up_callback,
                     error_callback(sc);
                 }
         }
+
+        /*
+         * This is redundant, but the less-than-or-equal-to condition of the
+         * for loop will lead to an infinite loop if the end of the network's
+         * subnet range is 255.255.255.255
+         */
+        if (sc->target.sin_addr.s_addr == sc->end)
+        {
+            break;
+        }
     }
 }
 
