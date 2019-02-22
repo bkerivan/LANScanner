@@ -1,12 +1,15 @@
+Version 0.1.3
+-------------
+Added device module
+
+
 Version 0.1.2
 -------------
-
 Added signal handling
 
 
 Version 0.1.1
 -------------
-
 Separated source code into modules
 
 Updated error messages
@@ -14,6 +17,5 @@ Updated error messages
 
 Version 0.1.0
 -------------
-
 Project created
 
