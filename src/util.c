@@ -2,6 +2,8 @@
 #include <string.h>
 #include <sys/time.h>
 
+#include "util.h"
+
 void *
 zmalloc(size_t size)
 {
