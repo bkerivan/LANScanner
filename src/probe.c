@@ -1,3 +1,4 @@
+#include <arpa/inet.h>
 #include <errno.h>
 #include <stddef.h>
 #include <sys/select.h>
@@ -6,7 +7,7 @@
 #include "socket_util.h"
 
 int
-tcp_probe(struct sockaddr *target, uint16_t port, struct timeval *timeout)
+tcp_probe(struct sockaddr_in *target, uint16_t port, struct timeval *timeout)
 {
     int fd = 0, ret = 0;
     socklen_t len = sizeof(ret);
@@ -31,8 +32,8 @@ tcp_probe(struct sockaddr *target, uint16_t port, struct timeval *timeout)
         return -1;
     }
 
-    SET_PORT(target, port);
-    connect(fd, target, sizeof(*target));
+    target->sin_port = htons(port);
+    connect(fd, (struct sockaddr *) target, sizeof(*target));
 
     FD_ZERO(&fds);
     FD_SET(fd, &fds);

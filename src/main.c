@@ -1,15 +1,11 @@
 #include <arpa/inet.h>
 #include <errno.h>
-#include <ifaddrs.h>
-#include <net/if.h>
-#include <netinet/in.h>
 #include <signal.h>
-#include <stdio.h>
 #include <string.h>
-#include <sys/socket.h>
+#include <stdio.h>
 #include <sys/time.h>
-#include <sys/types.h>
 
+#include "device.h"
 #include "probe.h"
 #include "socket_util.h"
 
@@ -60,68 +56,43 @@ catch_signals(void)
 int
 main(void)
 {
-    struct ifaddrs *ifa = NULL, *ifap = NULL;
-    in_addr_t local = 0, netmask = 0, bcast = 0, start = 0, end = 0, target;
-    struct sockaddr addr = {0};
+    struct device *dev = NULL;
+    in_addr_t bcast = 0, start = 0, end = 0, target;
+    struct sockaddr_in addr = {0};
     char addrbuf[INET_ADDRSTRLEN] = {0};
     struct timeval timeout = {DEFAULT_TIMEOUT_SEC, DEFAULT_TIMEOUT_USEC};
     int ret = 0;
 
-    if (getifaddrs(&ifa))
-    {
-        perror("[!] Failed to retrieve network interface list");
-        return 1;
-    }
+    dev = get_live_device(NULL);
 
-    for (ifap = ifa; ifap; ifap = ifap->ifa_next)
+    if (!dev)
     {
-        if (ifap->ifa_addr && ifap->ifa_netmask)
+        if (errno)
         {
-            /*
-             * Find a running, non-loopback IPv4 interface with resources
-             * allocated
-             */
-            if (ifap->ifa_flags & IFF_UP && ifap->ifa_flags & IFF_RUNNING
-                && !(ifap->ifa_flags & IFF_LOOPBACK)
-                && ifap->ifa_addr->sa_family == AF_INET)
-            {
-                break;
-            }
+            perror("[!] Failed to retrieve network device");
         }
-    }
+        else
+        {
+            fputs("[!] Failed to find suitable network device\n", stderr);
+        }
 
-    /*
-     * No such interface
-     */
-    if (!ifap)
-    {
-        fprintf(stderr, "[!] Failed to find suitable network interface\n");
-        freeifaddrs(ifa);
         return 1;
     }
 
-    local = EXTRACT_INET(ifap->ifa_addr); 
-    netmask = EXTRACT_INET(ifap->ifa_netmask);
-
-    /*
-     * Store broadcast address if there is one
-     */
-    if (ifap->ifa_dstaddr && ifap->ifa_flags & IFF_BROADCAST)
-    {
-        bcast = EXTRACT_INET(ifap->ifa_dstaddr);
-    }
-
-    printf("Scanning %s\n\n", ifap->ifa_name);
-
-    freeifaddrs(ifa);
+    printf("Scanning %s\n\n", dev->name);
 
     /*
      * Determine subnet range
      */
-    start = local & netmask;
-    end = start | (~netmask);
+    start = dev->local.sin_addr.s_addr & dev->netmask.sin_addr.s_addr;
+    end = start | (~dev->netmask.sin_addr.s_addr);
 
-    addr.sa_family = AF_INET;
+    if (dev->bcast)
+    {
+        bcast = dev->bcast->sin_addr.s_addr;
+    }
+
+    addr.sin_family = AF_INET;
 
     flag = 0;
     catch_signals();
@@ -138,25 +109,25 @@ main(void)
         /*
          * Don't scan local address or broadcast address
          */
-        if (target == local || target == bcast)
+        if (target == dev->local.sin_addr.s_addr || target == bcast)
         {
-            if (!INET_STR(&addr, addrbuf, INET_ADDRSTRLEN))
+            if (!inet_ntop(AF_INET, &addr.sin_addr, addrbuf, INET_ADDRSTRLEN))
             {
                 perror("[!] Failed to convert address to string");
                 printf("0x%08x [%s]\n", target,
-                       target == local ? "YOU" : "BROADCAST");
+                       target == bcast ? "BROADCAST" : "YOU");
             }
             else
             {
                 printf("%s [%s]\n", addrbuf,
-                       target == local ? "YOU" : "BROADCAST");
+                       target == bcast ? "BROADCAST" : "YOU");
             }
 
             memset(addrbuf, 0, INET_ADDRSTRLEN);
             continue;
         }
 
-        SET_INET(&addr, target);
+        addr.sin_addr.s_addr = target;
 
         ret = tcp_probe(&addr, DEFAULT_PORT, &timeout);
 
@@ -174,7 +145,7 @@ main(void)
             continue;
         }
 
-        if (!INET_STR(&addr, addrbuf, INET_ADDRSTRLEN))
+        if (!inet_ntop(AF_INET, &addr.sin_addr, addrbuf, INET_ADDRSTRLEN))
         {
             perror("[!] Failed to convert remote host address to string");
 
@@ -192,6 +163,7 @@ main(void)
         memset(addrbuf, 0, INET_ADDRSTRLEN);
     }
 
+    free_device(dev);
     return 0;
 }
 
