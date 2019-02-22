@@ -85,13 +85,24 @@ init_scanner(uint8_t scan_type, const char *dev_name, struct timeval *timeout,
         return NULL;
     }
 
+    /*
+     * Set the scan type as well as the probe method and the port
+     */
     if (set_scan_type(sc, scan_type, port))
     {
         free_scanner(sc);
+
+        /*
+         * An error in set_scan_type means an invalid scan type was specified
+         */
         errno = EINVAL;
+
         return NULL;
     }
 
+    /*
+     * If timeout is NULL, use the default value
+     */
     sc->timeout.tv_sec = !timeout ? SCANNER_DEFAULT_TIMEOUT_SEC
                                   : timeout->tv_sec;
     sc->timeout.tv_usec = !timeout ? SCANNER_DEFAULT_TIMEOUT_USEC
@@ -99,6 +110,9 @@ init_scanner(uint8_t scan_type, const char *dev_name, struct timeval *timeout,
 
     sc->target.sin_family = AF_INET;
 
+    /*
+     * Determine subnet range
+     */
     sc->start = sc->dev->local.sin_addr.s_addr
                 & sc->dev->netmask.sin_addr.s_addr;
     sc->end = sc->start | (~sc->dev->netmask.sin_addr.s_addr);
@@ -120,6 +134,12 @@ run_scan(struct scanner *sc, probe_up_callback_t up_callback,
         return;
     }
 
+    /*
+     * Iterate through subnet, calling the appropriate callbacks.
+     *
+     * To increment target IP number, must convert from network byte order to
+     * host byte order, add one, and convert back.
+     */
     for (sc->target.sin_addr.s_addr = sc->start;
          sc->target.sin_addr.s_addr <= sc->end && !signal_flag;
          sc->target.sin_addr.s_addr = htonl(ntohl(sc->target.sin_addr.s_addr)
