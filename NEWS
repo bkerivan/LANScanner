@@ -1,3 +1,13 @@
+Version 0.2.2
+-------------
+Moved signal handling to separate module
+
+Made some internal changes to callback functionality
+
+Fixed bug that could have led to infinite loop in scans of networks whose
+subnet ranges end in 255.255.255.255
+
+
 Version 0.2.1
 -------------
 Added port randomization to scanner module
