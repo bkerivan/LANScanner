@@ -4,15 +4,10 @@
 #include <sys/socket.h>
 
 #include "device.h"
+#include "handle_signals.h"
 #include "probe.h"
 #include "scanner.h"
 #include "util.h"
-
-
-/*
-* Set signal flag to 0 so it can be used as terminating condition
-*/
-int signal_flag = 0;
 
 int
 set_scan_type(struct scanner *sc, uint8_t scan_type, uint16_t port)
@@ -132,6 +127,12 @@ run_scan(struct scanner *sc, probe_callback_t up_callback,
     {
         return;
     }
+
+    /*
+     * Catch signals so that a marked signal sent to the process will terminate
+     * the loop below
+     */
+    catch_signals();
 
     /*
      * Iterate through subnet, calling the appropriate callbacks.

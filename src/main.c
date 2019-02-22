@@ -1,7 +1,6 @@
 #include <arpa/inet.h>
 #include <errno.h>
 #include <netinet/in.h>
-#include <signal.h>
 #include <stdio.h>
 
 #include "scanner.h"
@@ -9,41 +8,6 @@
  * Default settings
  */
 #define DEFAULT_PORT            80
-
-/*
- * Set global flag if a marked signal has been caught
- */
-void
-sighandler(int signum)
-{
-    /*
-     * Write newline to stdout if keyboard interrupt has been sent
-     */
-     if (signum == SIGINT)
-     {
-         putchar('\n');
-     }
-
-     signal_flag++;
-}
-
-/*
- * Catch all catchable signals that terminate process (plus SIGQUIT)
- */
-void
-catch_signals(void)
-{
-    struct sigaction act = {{0}};
-
-    sigemptyset(&act.sa_mask);
-    act.sa_handler = sighandler;
-
-    sigaction(SIGHUP, &act, NULL);
-    sigaction(SIGINT, &act, NULL);
-    sigaction(SIGQUIT, &act, NULL);
-    sigaction(SIGPIPE, &act, NULL);
-    sigaction(SIGTERM, &act, NULL);
-}
 
 void
 print_up_host(struct scanner *sc)
