@@ -1,3 +1,5 @@
+4befda3 util.c fixed to include util.h
+5d835bc Updated ChangeLog
 0d53e3e Include stddef.h in probe.c for NULL declaration
 0d90354 Updated ChangeLog
 2b92599 Push v0.2.2
