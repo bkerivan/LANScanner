@@ -28,17 +28,7 @@ typedef int (*probe_method_t)(struct scanner *sc);
 /*
  * Callback function for each scanned host that is up.
  */
-typedef void (*probe_up_callback_t)(struct scanner *sc);
-
-/*
- * Callback function for each scanned host that is not up.
- */
-typedef void (*probe_down_callback_t)(struct scanner *sc);
-
-/*
- * Callback function for each error that occurs in a probe.
- */
-typedef void (*probe_error_callback_t)(struct scanner *sc);
+typedef void (*probe_callback_t)(struct scanner *sc);
 
 struct scanner
 {
@@ -110,9 +100,8 @@ init_scanner(uint8_t scan_type, const char *dev_name, struct timeval *timeout,
  * probe.
  */
 void
-run_scan(struct scanner *sc, probe_up_callback_t up_callback,
-         probe_down_callback_t down_callback,
-         probe_error_callback_t error_callback);
+run_scan(struct scanner *sc, probe_callback_t up_callback,
+         probe_callback_t down_callback, probe_callback_t error_callback);
 
 #endif /* SCANNER_H */
 

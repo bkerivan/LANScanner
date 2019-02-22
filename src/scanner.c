@@ -123,9 +123,8 @@ init_scanner(uint8_t scan_type, const char *dev_name, struct timeval *timeout,
 }
 
 void
-run_scan(struct scanner *sc, probe_up_callback_t up_callback,
-         probe_down_callback_t down_callback,
-         probe_error_callback_t error_callback)
+run_scan(struct scanner *sc, probe_callback_t up_callback,
+         probe_callback_t down_callback, probe_callback_t error_callback)
 {
     int ret = 0;
 
