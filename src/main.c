@@ -162,7 +162,7 @@ main(int argc, char *argv[])
                 if (errno || *endptr || ret < 0 || ret > 65535)
                 {
                     fprintf(stderr, "[!] Invalid port: \"%s\"\n", optarg);
-                    fprintf(stderr, "[*] Using default port: %d\n",
+                    fprintf(stderr, "[*] Using default port: %d\n\n",
                             DEFAULT_PORT);
                     endptr = NULL;
                 }
@@ -177,7 +177,7 @@ main(int argc, char *argv[])
                 if (errno || *endptr || ret < 0)
                 {
                     fprintf(stderr, "[!] Invalid timeout: \"%s\"\n", optarg);
-                    fprintf(stderr, "[*] Using default timeout: %d msec\n", 
+                    fprintf(stderr, "[*] Using default timeout: %d msec\n\n", 
                             DEFAULT_TIMEOUT_SEC * 1000
                             + DEFAULT_TIMEOUT_USEC / 1000);
                     endptr = NULL;
@@ -192,8 +192,9 @@ main(int argc, char *argv[])
                 scan_type = parse_scan_type(optarg);
                 if (scan_type == SCAN_TYPE_INVALID)
                 {
-                    fprintf(stderr, "[!] Invalid scan type: %s\n\n", optarg);
-                    fputs("[*] Using default scan type: TCP connect\n", stderr);
+                    fprintf(stderr, "[!] Invalid scan type: %s\n", optarg);
+                    fputs("[*] Using default scan type: TCP connect\n\n",
+                          stderr);
                     scan_type = DEFAULT_SCAN_TYPE;
                 }
                 break;
