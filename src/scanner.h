@@ -15,6 +15,9 @@
  */
 extern int signal_flag;
 
+/*
+ * Forward declare struct scanner for use in typedefs below.
+ */
 struct scanner;
 
 /*
@@ -24,10 +27,14 @@ struct scanner;
 typedef int (*probe_method_t)(struct scanner *sc);
 
 /*
- * Callback function for each scanned host that is up.
+ * Callback function for each scanned host
  */
 typedef void (*probe_callback_t)(struct scanner *sc);
 
+/*
+ * Definiton of struct scanner, below typedefs because it contains members of
+ * those types
+ */
 struct scanner
 {
     struct device *dev;
@@ -44,9 +51,6 @@ struct scanner
 
 /*
  * Sets the scanner to the specified scan type.
- *
- * If timeout is NULL, the scanner's timeout is set to the default value of 10
- * milliseconds.
  *
  * If the port argument is 0, the port to be scanned is set to a random integer
  * between 0 and 65535. For scan types where ports are irrelevant, the port
@@ -71,8 +75,8 @@ free_scanner(struct scanner *sc);
  * If dev_name is not NULL, attempts to initialize scanner for a suitable
  * network device of the specified name.
  *
- * If timeout is NULL, the scanner's timeout is set to the default value
- * defined above.
+ * The timeout parameter must contain a struct timeval pointer, or NULL will
+ * be returned with errno set to EINVAL.
  *
  * If the port argument is 0, the port to be scanned is set to a random integer
  * between 0 and 65535. For scan types where ports are irrelevant, the port
