@@ -1,3 +1,9 @@
+41af012 Push v1.0.0
+4944601 Added support for timeout and port command line options
+2e73995 Add support for some command line options
+9d216cb Added break in default case of switch statement in set_scan_type for the sake of good practice
+d84e398 Added SCAN_TYPE_INVALID for option processing
+faf7eac Updated ChangeLog
 4befda3 util.c fixed to include util.h
 5d835bc Updated ChangeLog
 0d53e3e Include stddef.h in probe.c for NULL declaration
