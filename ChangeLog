@@ -1,3 +1,5 @@
+2a466a3 Fixed some comments in scanner.h
+487844c Updated ChangeLog
 e165315 Fixed newlines in error messages for option processing
 3d697c1 Updated ChangeLog
 1f12ad0 Use optarg in error messages when processing options
