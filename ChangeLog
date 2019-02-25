@@ -1,3 +1,5 @@
+1f12ad0 Use optarg in error messages when processing options
+704bac3 Updated ChangeLog
 41af012 Push v1.0.0
 4944601 Added support for timeout and port command line options
 2e73995 Add support for some command line options
