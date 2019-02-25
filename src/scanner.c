@@ -26,6 +26,7 @@ set_scan_type(struct scanner *sc, uint8_t scan_type, uint16_t port)
             break;
         default:
             ret = -1;
+            break;
     }
 
     /*
