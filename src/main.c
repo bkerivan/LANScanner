@@ -161,8 +161,7 @@ main(int argc, char *argv[])
                 ret = strtol(optarg, &endptr, 10);
                 if (errno || *endptr || ret < 0 || ret > 65535)
                 {
-                    fprintf(stderr, "[!] Invalid port: \"%s\"\n",
-                            argv[optind - 1]);
+                    fprintf(stderr, "[!] Invalid port: \"%s\"\n", optarg);
                     fprintf(stderr, "[*] Using default port: %d\n",
                             DEFAULT_PORT);
                     endptr = NULL;
@@ -177,8 +176,7 @@ main(int argc, char *argv[])
                 ret = strtol(optarg, &endptr, 10);
                 if (errno || *endptr || ret < 0)
                 {
-                    fprintf(stderr, "[!] Invalid timeout: \"%s\"\n",
-                    argv[optind - 1]);
+                    fprintf(stderr, "[!] Invalid timeout: \"%s\"\n", optarg);
                     fprintf(stderr, "[*] Using default timeout: %d msec\n", 
                             DEFAULT_TIMEOUT_SEC * 1000
                             + DEFAULT_TIMEOUT_USEC / 1000);
