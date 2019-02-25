@@ -66,6 +66,12 @@ init_scanner(uint8_t scan_type, const char *dev_name, struct timeval *timeout,
 {
     struct scanner *sc = NULL;
 
+    if (!timeout)
+    {
+        errno = EINVAL;
+        return NULL;
+    }
+
     sc = zmalloc(sizeof(*sc));
 
     if (!sc)
@@ -96,13 +102,8 @@ init_scanner(uint8_t scan_type, const char *dev_name, struct timeval *timeout,
         return NULL;
     }
 
-    /*
-     * If timeout is NULL, use the default value
-     */
-    sc->timeout.tv_sec = !timeout ? SCANNER_DEFAULT_TIMEOUT_SEC
-                                  : timeout->tv_sec;
-    sc->timeout.tv_usec = !timeout ? SCANNER_DEFAULT_TIMEOUT_USEC
-                                   : timeout->tv_usec;
+    sc->timeout.tv_sec = timeout->tv_sec;
+    sc->timeout.tv_usec = timeout->tv_usec;
 
     sc->target.sin_family = AF_INET;
 

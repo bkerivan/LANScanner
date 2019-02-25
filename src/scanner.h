@@ -7,9 +7,6 @@
 
 #include "device.h"
 
-#define SCANNER_DEFAULT_TIMEOUT_SEC     0
-#define SCANNER_DEFAULT_TIMEOUT_USEC    10000
-
 #define SCAN_TYPE_INVALID   0x00
 #define SCAN_TYPE_CONNECT   0x01
 
