@@ -1,4 +1,5 @@
 #include <arpa/inet.h>
+#include <ctype.h>
 #include <errno.h>
 #include <getopt.h>
 #include <netinet/in.h>
@@ -12,9 +13,28 @@
 /*
  * Program information
  */
-#define PROGRAM_NAME    "LANScanner"
-#define VERSION_STRING  "v1.0.1"
-#define CODE_URL        "https://github.com/bkerivan/LANScanner"
+#define PROGRAM_NAME        "LANScanner"
+#define VERSION_STRING      "v1.0.1"
+#define PROGRAM_URL         "https://github.com/bkerivan/LANScanner"
+#define BUG_REPORT_EMAIL    "bkerivan@villanova.edu"
+
+/*
+ * More information used in version message
+ */
+#define COPYRIGHT_YEAR      2019
+#define COPYRIGHT_HOLDER    "Brendan Kerivan"
+#define LICENSE_STRING      "License: MIT License"
+#define LICENSE_URL         "https://opensource.org/licenses/MIT"
+#define SOFTWARE_STATEMENT  "This is free software: " \
+                            "you are free to change and redistribute it.\n" \
+                            "There is NO WARRANTY, " \
+                            "to the extent permitted by law."
+
+/*
+ * Character code for the copyright symbol -- used in version message
+ */
+#define COPYRIGHT_CHARCODE  0xA9
+
 
 /*
  * Default settings
@@ -71,14 +91,27 @@ print_probe_error(struct scanner *sc)
 void
 print_version(void)
 {
-    printf("%s %s (%s)\n", PROGRAM_NAME, VERSION_STRING, CODE_URL);
+    printf("%s %s\n", PROGRAM_NAME, VERSION_STRING);
+    
+    if (isprint(COPYRIGHT_CHARCODE))
+    {
+        printf("Copyright %c ", COPYRIGHT_CHARCODE);
+    }
+    else
+    {
+        printf("Copyright (C) ");
+    }
+
+    printf("%d %s\n%s <%s>\n%s\n", COPYRIGHT_YEAR, COPYRIGHT_HOLDER,
+           LICENSE_STRING, LICENSE_URL, SOFTWARE_STATEMENT);
 }
 
 void
 print_usage(const char *binary_name)
 {
-    printf("%s %s (%s)\n\n", PROGRAM_NAME, VERSION_STRING, CODE_URL); 
-    printf("Usage: %s [OPTIONS]\n\n", binary_name);
+    printf("%s %s\n\n"
+           "Usage: %s [OPTIONS]\n\n", PROGRAM_NAME, VERSION_STRING,
+           binary_name); 
     puts("OPTIONS:\n"
          "\t-d, --device_name <device>\n"
          "\t-p, --port <port (1-65535)>\n"
@@ -87,7 +120,10 @@ print_usage(const char *binary_name)
          "\t-v, --version\n"
          "\t-h, --help\n\n"
          "SCAN TYPES:\n"
-         "\t-sC, --scan-type=C\t\tTCP connect scan\n");
+         "\t-sC, --scan-type=C\t\tTCP connect scan\n\n");
+    printf("Report bugs to: %s\n"
+           "%s home page: <%s>\n", BUG_REPORT_EMAIL, PROGRAM_NAME,
+           PROGRAM_URL);
 }
 
 int
