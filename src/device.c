@@ -93,6 +93,8 @@ get_live_device(const char *dev_name)
         memcpy(dev->bcast, ifap->ifa_dstaddr, sizeof(*dev->bcast));
     }
 
+    freeifaddrs(ifa);
+
     return dev;
 }
 
