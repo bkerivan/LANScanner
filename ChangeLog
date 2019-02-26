@@ -1,3 +1,5 @@
+c8517f1 Updated configure script for v1.0.1
+63d18d8 Updated ChangeLog
 646b242 Push v1.0.1
 c340cf8 Updated ChangeLog
 ffda1f5 Fixed memory leak in device.c resulting from not calling freeifaddrs before successfully returning from get_live_device
