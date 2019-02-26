@@ -1,3 +1,5 @@
+ffda1f5 Fixed memory leak in device.c resulting from not calling freeifaddrs before successfully returning from get_live_device
+48cfa41 Updated ChangeLog
 51a2fbd Added .gitattributes so GitHub recognizes this repo as a C project
 ed6fa44 Updated ChangeLog
 2a466a3 Fixed some comments in scanner.h
