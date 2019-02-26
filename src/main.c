@@ -13,7 +13,7 @@
  * Program information
  */
 #define PROGRAM_NAME    "LANScanner"
-#define VERSION_STRING  "v1.0.0"
+#define VERSION_STRING  "v1.0.1"
 #define CODE_URL        "https://github.com/bkerivan/LANScanner"
 
 /*
