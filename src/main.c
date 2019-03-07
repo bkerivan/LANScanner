@@ -8,6 +8,7 @@
 #include <string.h>
 #include <sys/time.h>
 
+#include "main_callbacks.h"
 #include "scanner.h"
 
 /*
@@ -43,50 +44,6 @@
 #define DEFAULT_TIMEOUT_SEC     0
 #define DEFAULT_TIMEOUT_USEC    10000
 #define DEFAULT_SCAN_TYPE       SCAN_TYPE_CONNECT
-
-void
-print_up_host(struct scanner *sc)
-{
-    char addrbuf[INET_ADDRSTRLEN] = {0};
-    in_addr_t bcast = 0;
-
-    if (!sc)
-    {
-        return;
-    }
-
-    if (sc->dev->bcast)
-    {
-        bcast = sc->dev->bcast->sin_addr.s_addr;
-    }
-
-    if (!inet_ntop(AF_INET, &sc->target.sin_addr, addrbuf, INET_ADDRSTRLEN))
-    {
-        perror("[!] Failed to convert host address to string");
-        printf("0x%08x", sc->target.sin_addr.s_addr);
-    }
-    else
-    {
-        printf("%s", addrbuf);
-    }
-    
-    if (sc->target.sin_addr.s_addr == sc->dev->local.sin_addr.s_addr
-        || sc->target.sin_addr.s_addr == bcast)
-    {
-        printf(" [%s]\n", sc->target.sin_addr.s_addr == bcast ? "BROADCAST"
-                                                              : "YOU");
-    }
-    else
-    {
-        putchar('\n');
-    }
-}
-
-void
-print_probe_error(struct scanner *sc)
-{
-    perror("[!] Probe of remote host failed");
-}
 
 void
 print_version(void)
