@@ -1,3 +1,5 @@
+737c5e3 Added main.h to isolate core program functionality in main.c
+78ab64f Updated ChangeLog
 213f2c0 Added main_callbacks module
 a7fb491 Updated ChangeLog
 0f48efd Updated version and help messages
