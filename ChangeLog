@@ -1,3 +1,5 @@
+ea63c3c Changed default port from 80 to 31337 due to false positives in connect scan
+7d984ce Updated ChangeLog
 737c5e3 Added main.h to isolate core program functionality in main.c
 78ab64f Updated ChangeLog
 213f2c0 Added main_callbacks module
