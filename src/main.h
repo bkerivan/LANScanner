@@ -32,7 +32,7 @@
 /*
  * Default settings
  */
-#define DEFAULT_PORT            80
+#define DEFAULT_PORT            31337
 #define DEFAULT_TIMEOUT_SEC     0
 #define DEFAULT_TIMEOUT_USEC    10000
 #define DEFAULT_SCAN_TYPE       SCAN_TYPE_CONNECT
