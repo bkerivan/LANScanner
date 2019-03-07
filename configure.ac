@@ -1,7 +1,7 @@
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([src/main.c])
 
-AC_INIT([LANScanner], [1.0.1])
+AC_INIT([LANScanner], [1.0.2])
 AM_INIT_AUTOMAKE([foreign])
 
 AC_PROG_CC

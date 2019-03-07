@@ -1,3 +1,12 @@
+Version 1.0.2
+-------------
+Changed default port from 80 to 31337 due to false positives in connect scan
+
+Better help and usage messages at command line
+
+More modular program and code structure for easier maintenance and updates
+
+
 Version 1.0.1
 -------------
 Fixed a memory leak that occurred when retrieving a network device
