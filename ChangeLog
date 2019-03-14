@@ -1,3 +1,5 @@
+c27e6ac Added packets module
+bbac8ba Updated ChangeLog
 0c3d724 Push v1.0.2
 7d4b111 Updated ChangeLog
 ea63c3c Changed default port from 80 to 31337 due to false positives in connect scan
