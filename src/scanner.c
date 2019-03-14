@@ -24,6 +24,9 @@ set_scan_type(struct scanner *sc, uint8_t scan_type, uint16_t port)
         case SCAN_TYPE_CONNECT:
             sc->probe = connect_probe;
             break;
+        case SCAN_TYPE_ICMP:
+            sc->probe = icmp_probe;
+            break;
         default:
             ret = -1;
             break;

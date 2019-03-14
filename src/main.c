@@ -41,7 +41,8 @@ print_usage(const char *binary_name)
          "\t-v, --version\n"
          "\t-h, --help\n\n"
          "SCAN TYPES:\n"
-         "\t-sC, --scan-type=C\t\tTCP connect scan\n\n");
+         "\t-sC, --scan-type=C\t\tTCP connect scan\n"
+         "\t-sI, --scan-type=I\t\tICMP echo scan\n\n");
     printf("Report bugs to: %s\n"
            "%s home page: <%s>\n", BUG_REPORT_EMAIL, PROGRAM_NAME,
            PROGRAM_URL);
@@ -63,6 +64,9 @@ parse_scan_type(const char *scan_type_str)
             {
                 case 'C':
                     scan_type = SCAN_TYPE_CONNECT;
+                    break;
+                case 'I':
+                    scan_type = SCAN_TYPE_ICMP;
                     break;
                 default:
                     /*

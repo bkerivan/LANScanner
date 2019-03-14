@@ -13,5 +13,8 @@
 int
 connect_probe(struct scanner *sc);
 
+int
+icmp_probe(struct scanner *sc);
+
 #endif /* PROBE_H */
 

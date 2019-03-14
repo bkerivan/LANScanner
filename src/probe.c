@@ -1,9 +1,12 @@
 #include <errno.h>
 #include <netinet/in.h>
 #include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/select.h>
 #include <sys/socket.h>
 
+#include "packets.h"
 #include "probe.h"
 #include "socket_util.h"
 
@@ -15,16 +18,16 @@ connect_probe(struct scanner *sc)
     fd_set fds;
     in_addr_t bcast = 0;
 
-    /*
-     * Make sure scanner's file descriptor is set to -1 for error handling.
-     */
-    sc->fd = -1;
-
     if (!sc)
     {
         errno = EINVAL;
         return -1;
     }
+
+    /*
+     * Make sure scanner's file descriptor is set to -1 for error handling.
+     */
+    sc->fd = -1;
 
     if (sc->dev->bcast)
     {
@@ -95,5 +98,119 @@ connect_probe(struct scanner *sc)
      * connection, host is up; otherwise, host is not up.
      */
     return ret == ECONNREFUSED || ret == ECONNRESET || !ret ? 1 : 0;
+}
+
+int
+icmp_probe(struct scanner *sc)
+{
+    int ret = 0;
+    socklen_t len = sizeof(ret);
+    fd_set fds;
+    in_addr_t bcast = 0;
+    void *dgram = NULL;
+    struct sockaddr_in remote_host = {0};
+    
+    /*
+     * Sending just 1 byte of data
+     */
+    size_t dgram_len = sizeof(struct icmp_echo_header) + 1;
+
+    if (!sc)
+    {
+        errno = EINVAL;
+        return -1;
+    }
+
+    /*
+     * Make sure scanner's file descriptor is set to -1 for error handling.
+     */
+    sc->fd = -1;
+
+    if (sc->dev->bcast)
+    {
+        bcast = sc->dev->bcast->sin_addr.s_addr;
+    }
+
+    /*
+     * Return host up for local address or broadcast address
+     */
+    if (sc->target.sin_addr.s_addr == sc->dev->local.sin_addr.s_addr
+        || sc->target.sin_addr.s_addr == bcast)
+    {
+        return 1;
+    }
+    
+    sc->fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_ICMP);
+
+    if (sc->fd == -1)
+    {
+        return -1;
+    }
+
+    /*
+     * Might as well just send a character
+     */
+    dgram = build_icmp_echo("A", 1);
+
+    if (!dgram)
+    {
+        close_sock(sc->fd);
+        return -1;
+    }
+
+    if (sendto(sc->fd, dgram, dgram_len, 0, (struct sockaddr *) &sc->target,
+               sizeof(sc->target)) == -1)
+    {
+        free(dgram);
+        close_sock(sc->fd);
+        return -1;
+    }
+
+    FD_ZERO(&fds);
+    FD_SET(sc->fd, &fds);
+
+    ret = select(sc->fd + 1, &fds, NULL, NULL, &sc->timeout);
+
+    if (ret <= 0)
+    {
+        free(dgram);
+        close_sock(sc->fd);
+        return ret;
+    }
+
+    if (getsockopt(sc->fd, SOL_SOCKET, SO_ERROR, &ret, &len))
+    {
+        free(dgram);
+        close_sock(sc->fd);
+        return -1;
+    }
+
+    if (ret)
+    {
+        free(dgram);
+        close_sock(sc->fd);
+        errno = ret;
+        return -1;
+    }
+
+    len = sizeof(remote_host);
+    memset(dgram, 0, dgram_len); 
+
+    if (recvfrom(sc->fd, dgram, dgram_len, 0, (struct sockaddr *) &remote_host,
+                 &len) == -1)
+    {
+        free(dgram);
+        close_sock(sc->fd);
+        return -1;
+    }
+
+    free(dgram);
+    close_sock(sc->fd);
+
+    /*
+     * Host is only up if an ICMP packet was received from the target host
+     */
+    return memcmp(&remote_host.sin_addr, &sc->target.sin_addr,
+                  sizeof(struct in_addr)) ? 0 : 1;
 }
 

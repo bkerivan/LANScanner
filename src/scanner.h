@@ -9,6 +9,7 @@
 
 #define SCAN_TYPE_INVALID   0x00
 #define SCAN_TYPE_CONNECT   0x01
+#define SCAN_TYPE_ICMP      0x02
 
 /*
  * Flag for catching signals to terminate scan
