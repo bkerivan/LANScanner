@@ -7,7 +7,7 @@
  * Program information
  */
 #define PROGRAM_NAME        "LANScanner"
-#define VERSION_STRING      "v1.0.2"
+#define VERSION_STRING      "v1.1.0"
 #define PROGRAM_URL         "https://github.com/bkerivan/LANScanner"
 #define BUG_REPORT_EMAIL    "bkerivan@villanova.edu"
 
