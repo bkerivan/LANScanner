@@ -140,7 +140,14 @@ icmp_probe(struct scanner *sc)
         return 1;
     }
     
+    /*
+     * ICMP datagram sockets (unprivilegd) are only supported on MacOS 
+     */
+#ifdef __APPLE__    
     sc->fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_ICMP);
+#else
+    sc->fd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
+#endif /* __APPLE__ */
 
     if (sc->fd == -1)
     {
