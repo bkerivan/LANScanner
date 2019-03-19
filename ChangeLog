@@ -1,3 +1,5 @@
+b6321fe Use SOCK_RAW for ICMP scan on non-Apple systems
+4696021 Updated ChangeLog
 d4cdac1 Push v1.1.0
 373fe5c Updated ChangeLog
 6720096 Added ICMP scan
